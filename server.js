@@ -3,23 +3,24 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT;
 
-app.get('/testing', (req, res) => {
-	res.send('GsdfsdfETTesting');
-	console.log('Testing');
-});
+// Middleware
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
-app.post('/testing', (req, res) => {
-	res.send('postTesting');
-});
+// Controllers
+const choresController = require('./controllers/chores_controller.js')
+app.use('/chores', choresController)
 
-app.put('/testing', (req, res) => {
-	res.send('puttesting');
-});
+// Routes
+app.get('/', (req, res) => {
+	res.send('Get the right address, scrub')
+})
 
-app.delete('/testing', (req, res) => {
-	res.send('deleattesting');
-});
+app.get('*', (req, res) => {
+  res.send('Error 404')
+})
 
+// Listen
 app.listen(PORT, () => {
 	console.log(`ALIVE ${PORT}`);
 });
