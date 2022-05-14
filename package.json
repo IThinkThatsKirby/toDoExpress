@@ -1,6 +1,25 @@
 {
   "dependencies": {
     "dotenv": "^16.0.1",
-    "express": "^4.18.1"
-  }
+    "express": "^4.18.1",
+    "nodemon": "^2.0.16"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "name": "todoexpress",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IThinkThatsKirby/toDoExpress.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IThinkThatsKirby/toDoExpress/issues"
+  },
+  "homepage": "https://github.com/IThinkThatsKirby/toDoExpress#readme",
+  "description": ""
 }

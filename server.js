@@ -1,10 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const exPort = process.env.exPORT;
+const PORT = process.env.PORT;
 
 app.get('/testing', (req, res) => {
-	res.send('Testing');
+	res.send('GsdfsdfETTesting');
 	console.log('Testing');
 });
 
@@ -20,6 +20,6 @@ app.delete('/testing', (req, res) => {
 	res.send('deleattesting');
 });
 
-app.listen(exPort, () => {
-	console.log(`ALIVE ${exPort}`);
+app.listen(PORT, () => {
+	console.log(`ALIVE ${PORT}`);
 });
