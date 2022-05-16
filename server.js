@@ -1,36 +1,32 @@
 //dependencies
-require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT;
+// const db = require('./db');
+const { Client } = require('pg');
 
-const initOptions = {
-  // Capitalizes all SQL generated
-  capSQL: true,
-  // global event notification;
-  error(error, e) {
-    if (e.cn) {
-      // A connection-related error;
-
-      // Connections are reported back with the password hashed,
-      // for safe errors logging, without exposing passwords.
-      console.log('CN:', e.cn);
-      console.log('EVENT:', error.message || error);
-    }
-  },
-  // this is to be commited for debugging purposes, but left commented out until you need it
-  // if un-commented, it will print out the resulting query when any query is ran
-  query(e) {
-    console.log(e.query);
-  },
-};
-
-const pgp = require('pg-promise')(initOptions);
-const db = pgp(process.env.POSTGRES_URI);
-
-// Middleware
+// Middleware/Configuration
+require('dotenv').config();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+client.connect();
+
+client.query(
+  'SELECT table_schema,table_name FROM information_schema.tables;',
+  (err, res) => {
+    if (err) throw err;
+    for (let row of res.rows) {
+      console.log(JSON.stringify(row));
+    }
+    client.end();
+  }
+);
 
 // Controllers
 const choresController = require('./controllers/chores_controller.js');
@@ -38,14 +34,14 @@ app.use('/chores', choresController);
 
 // Routes
 app.get('/', (req, res) => {
-  res.send('Get the right address, scrub');
-});
-
-app.get('*', (req, res) => {
-  res.send('Error 404');
+  try {
+    res.send('Hello there. GENERAL KENOBI!');
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 // Listen
-app.listen(PORT, () => {
-  console.log(`ALIVE ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`ALIVE ${process.env.PORT}`);
 });
