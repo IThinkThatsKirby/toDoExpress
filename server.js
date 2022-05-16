@@ -1,6 +1,7 @@
 //dependencies
 require('dotenv').config();
 const express = require('express');
+const db = require('./db/queries');
 const app = express();
 const PORT = process.env.PORT;
 const PG_CONNECTION = process.env.PG_CONNECTION;
@@ -39,6 +40,7 @@ app.get('/', (req, res) => {
 app.get('*', (req, res) => {
 	res.send('Error 404');
 });
+app.post('/', db.createChore);
 
 // Listen
 app.listen(PORT, () => {
