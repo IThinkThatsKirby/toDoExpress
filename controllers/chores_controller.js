@@ -1,23 +1,54 @@
 const express = require('express');
+const { Pool } = require('pg/lib');
 const router = express.Router();
+const client = require('../db/index');
 
-router.get('/', (req, res) => {
-  res.send('GsdfsdfETTesting');
-  console.log('Testing');
-});
+// Routes
 
-router.post('/', async (req, res) => {
+//get all chores
+router.get('/', async (req, res) => {
   try {
-    console.log(req.body);
+    const { rows } = await client.query('SELECT * FROM chores;');
+    res.json(rows);
   } catch (error) {
     console.log(error.message);
   }
 });
 
+//get one chore
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const chore = await client.query(
+      'SELECT * FROM chores WHERE chore_id = $1',
+      [id]
+    );
+    res.json(chore.rows);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+//create a chore
+router.post('/', async (req, res) => {
+  try {
+    const { chore_name, completed, confirmed } = req.body;
+    const newChore = await client.query(
+      'INSERT INTO chores (chore_name, completed, confirmed) VALUES ($1, $2, $3) RETURNING *',
+      [chore_name, completed, confirmed]
+    );
+    res.json(newChore.rows);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+//edit a chore
 router.put('/', (req, res) => {
   res.send('puttesting');
 });
 
+//delete a chore
 router.delete('/', (req, res) => {
   res.send('deletetesting');
 });
