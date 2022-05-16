@@ -1,5 +1,4 @@
 //dependencies
-require('dotenv').config();
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT;
@@ -12,12 +11,14 @@ const client = new Client({
 		rejectUnauthorized: false,
 	},
 });
+
 client.connect();
+
 client.query('SELECT * FROM actor;', (err, res) => {
-	if (err) throw err;
-	for (let row of res.rows) {
-		console.log(JSON.stringify(row));
-	}
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
 });
 // Middleware
 app.use(express.json());
@@ -29,18 +30,18 @@ app.use('/chores', choresController);
 
 // Routes
 app.get('/', (req, res) => {
-	client.query('SELECT * FROM actor;', (err, res) => {
-		console.log(res.rows);
-		return res.rows;
-	});
-	res.send(JSON.stringify(res.row));
+  client.query('SELECT * FROM actor;', (err, res) => {
+    console.log(res.rows);
+    return res.rows;
+  });
+  res.send(JSON.stringify(res.row));
 });
 
 app.get('*', (req, res) => {
-	res.send('Error 404');
+  res.send('Error 404');
 });
 
 // Listen
 app.listen(PORT, () => {
-	console.log(`ALIVE ${PORT}`);
+  console.log(`ALIVE ${PORT}`);
 });
