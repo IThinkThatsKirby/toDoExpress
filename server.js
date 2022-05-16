@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 // make connection
-const { client, testGet } = require('./db/index');
+const client = require('./db/index');
 client.connect();
 
 // Middleware
@@ -16,27 +16,26 @@ app.use(express.json());
 const choresController = require('./controllers/chores_controller.js');
 app.use('/chores', choresController);
 
-// Routes
-app.get('/', async (req, res) => {
-  const { rows } = await client.query('SELECT * FROM chores;');
-  res.json(rows);
-});
+// // Routes
+// app.get('/', async (req, res) => {
+//   const { rows } = await client.query('SELECT * FROM chores;');
+//   res.json(rows);
+// });
 
-app.post('/', async (req, res) => {
-  try {
-    const { chore_name, completed, confirmed } = req.body;
-    const newChore = await client.query(
-      'INSERT INTO chores (chore_name, completed, confirmed) VALUES ($1, $2, $3) RETURNING *',
-      [chore_name, completed, confirmed]
-    );
-    res.json(newChore);
-  } catch (error) {
-    console.log(error.message);
-  }
-});
+// app.post('/', async (req, res) => {
+//   try {
+//     const { chore_name, completed, confirmed } = req.body;
+//     const newChore = await client.query(
+//       'INSERT INTO chores (chore_name, completed, confirmed) VALUES ($1, $2, $3) RETURNING *',
+//       [chore_name, completed, confirmed]
+//     );
+//     res.json(newChore);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// });
 
-app.get('/1', testGet);
-
+//404 handling
 app.get('*', (req, res) => {
   res.json('Error 404');
 });
