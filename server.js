@@ -10,7 +10,7 @@ client.connect();
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 
 // Controllers
 const choresController = require('./controllers/chores_controller.js');
@@ -26,7 +26,7 @@ app.post('/', async (req, res) => {
   try {
     const { chore_name, completed, confirmed } = req.body;
     const newChore = await client.query(
-      'INSERT INTO chores (chore_name, completed, confirmed) VALUES ($1) RETURNING *',
+      'INSERT INTO chores (chore_name, completed, confirmed) VALUES ($1, $2, $3) RETURNING *',
       [chore_name, completed, confirmed]
     );
     res.json(newChore);
