@@ -1,15 +1,12 @@
 //dependencies
 const express = require('express');
 const app = express();
-// const db = require('./db');
 const { Client } = require('pg');
 
-// Middleware/Configuration
-require('dotenv').config();
-app.use(express.json());
+const PORT = process.env.PORT || 5000;
 
 const client = new Client({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.DB_CONNECTION,
   ssl: {
     rejectUnauthorized: false,
   },
@@ -17,16 +14,15 @@ const client = new Client({
 
 client.connect();
 
-client.query(
-  'SELECT table_schema,table_name FROM information_schema.tables;',
-  (err, res) => {
-    if (err) throw err;
-    for (let row of res.rows) {
-      console.log(JSON.stringify(row));
-    }
-    client.end();
+client.query('SELECT * FROM actor;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
   }
-);
+});
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Controllers
 const choresController = require('./controllers/chores_controller.js');
@@ -34,14 +30,18 @@ app.use('/chores', choresController);
 
 // Routes
 app.get('/', (req, res) => {
-  try {
-    res.send('Hello there. GENERAL KENOBI!');
-  } catch (error) {
-    console.log(error);
-  }
+  client.query('SELECT * FROM actor;', (err, res) => {
+    console.log(res.rows);
+    return res.rows;
+  });
+  res.send(JSON.stringify(res.row));
+});
+
+app.get('*', (req, res) => {
+  res.send('Error 404');
 });
 
 // Listen
-app.listen(process.env.PORT, () => {
-  console.log(`ALIVE ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`ALIVE ${PORT}`);
 });

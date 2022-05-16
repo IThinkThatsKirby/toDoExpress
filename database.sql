@@ -1,11 +1,3 @@
---how to access heroku database with psql !!!
---password left blank and entered when prompted in command line
---This can easily be used to manipulate data within the command line
-
-----------
----------- psql --host=ec2-52-4-104-184.compute-1.amazonaws.com --port=5432 --username=ibslnpveydtyzi --password --dbname=d2qi6dve9dt6oc
-----------
-
 --creating chores table
 CREATE TABLE chores
    (chore_id SERIAL PRIMARY KEY,
