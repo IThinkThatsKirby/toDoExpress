@@ -1,15 +1,15 @@
 //dependencies
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT;
+const PG_CONNECTION = process.env.PG_CONNECTION;
+// Database things go here REMEBER TO FIX THE VARIABLES before you DEPLOY
 const { Client } = require('pg');
-
-const PORT = process.env.PORT || 5000;
-
 const client = new Client({
-  connectionString: process.env.DB_CONNECTION,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+	connectionString: PG_CONNECTION,
+	ssl: {
+		rejectUnauthorized: false,
+	},
 });
 
 client.connect();
