@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 5000;
-// Database things go here
+// Database things go here REMEBER TO FIX THE VARIABLES before you DEPLOY
 const { Client } = require('pg');
 const client = new Client({
 	connectionString:
