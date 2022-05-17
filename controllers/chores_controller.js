@@ -43,8 +43,21 @@ router.post('/', async (req, res) => {
 });
 
 //edit a chore
-router.put('/:id', (req, res) => {
-  res.send('puttesting');
+router.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { chore_name, completed, confirmed } = req.body;
+
+    const updateChore = await client.query(
+      'UPDATE chores SET chore_name = $1, completed = $2, confirmed = $3 WHERE chore_id = $4',
+      [chore_name, completed, confirmed, id]
+      )
+
+    res.json('Chore was updated.')
+
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 //delete a chore
