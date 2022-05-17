@@ -1,5 +1,4 @@
 const express = require('express');
-const { Pool } = require('pg/lib');
 const router = express.Router();
 const client = require('../db/index');
 
@@ -31,10 +30,10 @@ router.get('/:id', async (req, res) => {
 //create a chore
 router.post('/', async (req, res) => {
   try {
-    const { chore_name, completed, confirmed } = req.body;
+    const { chore_name, chore_description, user_id } = req.body;
     const newChore = await client.query(
-      'INSERT INTO chores (chore_name, completed, confirmed) VALUES ($1, $2, $3) RETURNING *',
-      [chore_name, completed, confirmed]
+      'INSERT INTO chores (chore_name, chore_description, user_id) VALUES ($1, $2, $3) RETURNING *',
+      [chore_name, chore_description, user_id]
     );
     res.json(newChore.rows);
   } catch (error) {
@@ -46,15 +45,14 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { chore_name, completed, confirmed } = req.body;
+    const { chore_name, chore_description, user_id } = req.body;
 
     const updateChore = await client.query(
-      'UPDATE chores SET chore_name = $1, completed = $2, confirmed = $3 WHERE chore_id = $4',
-      [chore_name, completed, confirmed, id]
-      );
+      'UPDATE chores SET chore_name = $1, chore_description = $2, user_id = $3 WHERE chore_id = $4',
+      [chore_name, chore_description, user_id, id]
+    );
 
-    res.json('Chore was updated.')
-
+    res.json('Chore was updated.');
   } catch (error) {
     console.log(error.message);
   }
