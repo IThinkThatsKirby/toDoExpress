@@ -8,4 +8,10 @@ const client = new Client({
   },
 });
 
+// const testGet = async (req, res) => {
+//   const { rows } = await client.query('SELECT * FROM actor;');
+
+//   res.send(rows[0]);
+// };
+
 module.exports = client;

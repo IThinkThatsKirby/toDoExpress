@@ -4,7 +4,6 @@ const router = express.Router();
 const client = require('../db/index');
 
 // Routes
-
 //get all chores
 router.get('/', async (req, res) => {
   try {
@@ -44,13 +43,22 @@ router.post('/', async (req, res) => {
 });
 
 //edit a chore
-router.put('/', (req, res) => {
+router.put('/:id', (req, res) => {
   res.send('puttesting');
 });
 
 //delete a chore
-router.delete('/', (req, res) => {
-  res.send('deletetesting');
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteChore = await client.query(
+      'DELETE FROM chores WHERE chore_id = $1',
+      [id]
+    );
+    res.json('Chore deleted');
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 module.exports = router;
