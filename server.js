@@ -16,6 +16,9 @@ app.use(express.json());
 const choresController = require('./controllers/chores_controller.js');
 app.use('/chores', choresController);
 
+const usersController = require('./controllers/users_controller.js');
+app.use('/users', usersController);
+
 //404 handling
 app.get('*', (req, res) => {
   res.json('Error 404');

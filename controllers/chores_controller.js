@@ -51,7 +51,7 @@ router.put('/:id', async (req, res) => {
     const updateChore = await client.query(
       'UPDATE chores SET chore_name = $1, completed = $2, confirmed = $3 WHERE chore_id = $4',
       [chore_name, completed, confirmed, id]
-      )
+      );
 
     res.json('Chore was updated.')
 
