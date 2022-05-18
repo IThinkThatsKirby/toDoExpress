@@ -72,9 +72,9 @@ router.post('/', async (req, res) => {
 //   }
 // });
 
-router
+router // 
   .route('/:id')
-  .get(async (req, res) => {
+  .get(async (req, res) => { // get one chore
     try {
       const { chore_name, chore_description, user_id } = req.body;
       const newChore = await client.query(
@@ -86,7 +86,7 @@ router
       console.log(error.message);
     }
   })
-  .put(async (req, res) => {
+  .put(async (req, res) => { // edit a chore
     try {
       const { id } = req.params;
       const { chore_name, chore_description, user_id } = req.body;
@@ -101,7 +101,7 @@ router
       console.log(error.message);
     }
   })
-  .delete(async (req, res) => {
+  .delete(async (req, res) => { // delete a chore
     try {
       const { id } = req.params;
       const deleteChore = await client.query(
