@@ -45,7 +45,6 @@ router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { user_name, role_id } = req.body;
-
     const updateChore = await client.query(
       'UPDATE users SET user_name = $1, role_id = $2 WHERE user_id = $3',
       [user_name, role_id, id]

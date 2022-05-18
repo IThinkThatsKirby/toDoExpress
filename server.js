@@ -19,6 +19,9 @@ app.use('/chores', choresController);
 const usersController = require('./controllers/users_controller.js');
 app.use('/users', usersController);
 
+const rewardsController = require('./controllers/rewards_controller');
+app.use('/rewards', rewardsController);
+
 //404 handling
 app.get('*', (req, res) => {
   res.json('Error 404');
