@@ -14,6 +14,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Seeding Pokemon as rewards
+// router.get('/seedRewards', async (req, res) => {
+//   for (let i = 1; i < 899; i++) {
+//     try {
+//       const addReward = await client.query(
+//         'INSERT INTO rewards (reward_poki_id) VALUES ($1) RETURNING *',
+//         [i]
+//       );
+//       console.log(i);
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   }
+// })
+
 //get one chore
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -51,12 +66,20 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { chore_name, chore_description, user_id } = req.body;
+    const { chore_name, chore_description, user_id, chore_done } = req.body;
 
     const updateChore = await client.query(
-      'UPDATE chores SET chore_name = $1, chore_description = $2, user_id = $3 WHERE chore_id = $4',
-      [chore_name, chore_description, user_id, id]
+      'UPDATE chores SET chore_name = $1, chore_description = $2, user_id = $3, chore_done = $4 WHERE chore_id = $5',
+      [chore_name, chore_description, user_id, chore_done, id]
     );
+    if (chore_done) {
+      reward_id = Math.ceil((Math.random() * 898)) // Poke API has 898 possible pokemon on 05/19/22
+      const giveReward = await client.query(
+        'INSERT INTO user_rewards (user_id, reward_id) VALUES ($1, $2) RETURNING *',
+        [user_id, reward_id]
+      );
+      // res.json(giveReward)
+    }
 
     res.json('Chore was updated.');
   } catch (error) {
