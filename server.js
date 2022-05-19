@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT;
+var path = require('path');
 
 // make connection
 const client = require('./db/index');
@@ -21,10 +22,13 @@ app.use('/users', usersController);
 
 //404 handling
 app.get('*', (req, res) => {
-  res.json('Error 404');
+	const status = 401;
+	res
+		.status(status)
+		.sendFile(path.join(__dirname, './response/401', '401.html'));
 });
 
 // Listen
 app.listen(PORT, () => {
-  console.log(`ALIVE ${PORT}`);
+	console.log(`ALIVE ${PORT}`);
 });
