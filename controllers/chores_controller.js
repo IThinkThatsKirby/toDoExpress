@@ -4,9 +4,10 @@ const client = require('../db/index');
 
 // Routes
 //get all chores
+//Might not use this at any point
 router.get('/', async (req, res) => {
   try {
-    const { rows } = await client.query('SELECT * FROM chores;');
+    const { rows } = await client.query('SELECT * FROM user_chores;');
     res.json(rows);
   } catch (error) {
     console.log(error.message);
@@ -34,6 +35,11 @@ router.post('/', async (req, res) => {
     const newChore = await client.query(
       'INSERT INTO chores (chore_name, chore_description, user_id) VALUES ($1, $2, $3) RETURNING *',
       [chore_name, chore_description, user_id]
+    );
+    const { chore_id } = newChore.rows[0];
+    const newUserChore = await client.query(
+      'INSERT INTO user_chores (user_id, chore_id) VALUES ($1, $2) RETURNING *',
+      [user_id, chore_id]
     );
     res.json(newChore.rows);
   } catch (error) {
