@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT;
 var path = require('path');
+var cors = require('cors');
 
 // make connection
 const client = require('./db/index');
@@ -11,6 +12,7 @@ client.connect();
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 // app.use(express.urlencoded({ extended: true }));
 
 // Controllers
