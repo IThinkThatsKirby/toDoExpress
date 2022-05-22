@@ -7,7 +7,7 @@ const client = require('../db/index');
 //Might not use this at any point
 router.get('/', async (req, res) => {
   try {
-    const { rows } = await client.query('SELECT * FROM user_chores;');
+    const { rows } = await client.query('SELECT * FROM chores;');
     res.json(rows);
   } catch (error) {
     console.log(error.message);
@@ -73,7 +73,7 @@ router.put('/:id', async (req, res) => {
       [chore_name, chore_description, user_id, chore_done, id]
     );
     if (chore_done) {
-      reward_id = Math.ceil((Math.random() * 898)) // Poke API has 898 possible pokemon on 05/19/22
+      reward_id = Math.ceil(Math.random() * 898); // Poke API has 898 possible pokemon on 05/19/22
       const giveReward = await client.query(
         'INSERT INTO user_rewards (user_id, reward_id) VALUES ($1, $2) RETURNING *',
         [user_id, reward_id]
@@ -91,8 +91,12 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const deleteUserChore = await client.query(
+      'DELETE FROM user_chores WHERE user_chores.chore_id = $1',
+      [id]
+    );
     const deleteChore = await client.query(
-      'DELETE FROM chores WHERE chore_id = $1',
+      'DELETE FROM chores WHERE chores.chore_id = $1',
       [id]
     );
     res.json('Chore deleted');
