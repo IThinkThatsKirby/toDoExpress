@@ -47,16 +47,16 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { chore_name, chore_description, user_id } = req.body;
-    const newChore = await client.query(
+    const { rows } = await client.query(
       'INSERT INTO chores (chore_name, chore_description, user_id) VALUES ($1, $2, $3) RETURNING *',
       [chore_name, chore_description, user_id]
     );
-    const { chore_id } = newChore.rows[0];
+    const { chore_id } = rows[0];
     const newUserChore = await client.query(
       'INSERT INTO user_chores (user_id, chore_id) VALUES ($1, $2) RETURNING *',
       [user_id, chore_id]
     );
-    res.json(newChore.rows);
+    res.json({ data: rows[0] });
   } catch (error) {
     console.log(error.message);
   }
@@ -78,10 +78,9 @@ router.put('/:id', async (req, res) => {
         'INSERT INTO user_rewards (user_id, reward_id) VALUES ($1, $2) RETURNING *',
         [user_id, reward_id]
       );
-      // res.json(giveReward)
     }
 
-    res.json('Chore was updated.');
+    res.json(updateChore.rows[0][data]);
   } catch (error) {
     console.log(error.message);
   }
